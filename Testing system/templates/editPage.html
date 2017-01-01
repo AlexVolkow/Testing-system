@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestingSystem</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>   
+     <style type="text/css">
+        input[type="text"] {width:35%;}
+        div[class='panel panel-default'] {width:85%;}    
+    </style>
+    <script type="text/javascript" >
+		var count = ${countQuestions};
+
+        function add(){
+        	count ++ ;
+        	var questions = document.getElementById("questions");
+            var tbody = document.createElement("tbody");
+        	var newQestion = document.createElement("tr");
+        		newQestion.setAttribute("id","t"+String(count));
+        		newQestion.innerHTML =
+        		"<tbody><tr id ='t"+String(count)+"'>"
+        		+"<td>"+String(count)+"</td>"
+        		+"<td><textarea cols='30' rows='7' name = 'q"+String(count)+"' ></textarea></td>"
+				+"<td><textarea cols='30' rows='7' name = 'a"+String(count)+"' ></textarea></td>"
+				+"<td><input class='btn btn-default' type='button' onclick='del("+String(count)+");'' value ='Delete'>"
+        		+"</tr></tbody>";
+            tbody.appendChild(newQestion);
+        	questions.appendChild(tbody);
+        }
+        function del(idx){
+        	var elem = document.getElementById('t'+String(idx));
+        	elem.remove();
+        	for (var i = idx+1;i<=count;i++){
+        		var currElem = document.getElementById('t'+String(i));
+        		var newIdx = i - 1;
+        		var textIdx = String(newIdx);
+        		currElem.setAttribute("id", 't'+textIdx);
+        		currElem.childNodes[0].innerHTML=textIdx;
+       			currElem.childNodes[1].childNodes[0].setAttribute('name','q'+textIdx);
+       			currElem.childNodes[2].childNodes[0].setAttribute('name','a'+textIdx);
+       			currElem.childNodes[3].childNodes[0].setAttribute('onclick','del('+textIdx+');');
+        	}
+        	count -- ;
+        }
+    </script>
+</head>
+<body>   
+<nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img alt="Test" src="../img/online-test.png" width="32" height="32">
+          </a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin?viewmode=themes">Admin panel</a>
+        </div>
+       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+             <li><a href="/admin?viewmode=themes">Home</a></li>
+            <li><a href="/admin?viewmode=users">Users</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+       </div>
+    </div>
+    </nav>
+    <div class="container">
+        <h2>${caption}</h2>
+        <form action="/admin/create" method="POST" class="form"  >
+            <div class='left'>
+              <div class="form-group">
+                <label for="inputName3" class="col-sm-1 control-label">Name</label>
+                <div class="col-sm-13">
+                  <input type="text" name="theme" class="form-control" id="inputName3" value='${theme}'>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputClas3" class="col-sm-1 control-label">Class</label>
+                <div class="col-sm-13">
+                  <input type="text" name="clas" class="form-control" id="inputClas3" value="${clas}">
+                </div>
+              </div>
+            </div>
+            <h3>Questions:</h3>
+            <div class='panel panel-default' >
+            <table id = "questions" class='table'>
+                <tr>
+                    <td colspan="2">Question</td>
+                    <td>Answer</td>
+                </tr>
+                ${content}
+            </table>
+            </div>
+            <p><input type ="button" onclick="add();" value = "Add" class="btn btn-default">
+            <p><button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
